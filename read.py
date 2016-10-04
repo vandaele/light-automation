@@ -1,10 +1,10 @@
-from pyModbusTCP.client import ModbusClient
+from automaton_client import AutomatonClient
 
 SERVER_HOST = "localhost"
 SERVER_PORT = 1502
 
 try:
-    c = ModbusClient(host=SERVER_HOST, port=SERVER_PORT)
+    c = AutomatonClient(host=SERVER_HOST, port=SERVER_PORT)
 
     # open or reconnect TCP to server
     if not c.is_open():
@@ -14,7 +14,7 @@ try:
     # if open() is ok, read register (modbus function 0x03)
     if c.is_open():
         # read 10 registers at address 0, store result in regs list
-        regs = c.read_holding_registers(12389, 23)
+        regs = c.read_all()
         # if success display registers
         if regs:
             print("READ 23 regs from ad #12389: %s" % regs)

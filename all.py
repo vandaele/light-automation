@@ -11,11 +11,8 @@ try:
         if not c.open():
             print("unable to connect to %s:%s" % (SERVER_HOST, SERVER_PORT))
 
-    # if open() is ok, read register (modbus function 0x03)
     if c.is_open():
-        # read 10 registers at address 0, store result in regs list
         result = c.write_all([100]*23)
-        # if success display registers
         if result:
             print("WROTE 23 regs from ad #12389")
 

@@ -1,3 +1,5 @@
+import random
+
 from automaton_client import AutomatonClient
 
 SERVER_HOST = "localhost"
@@ -8,12 +10,22 @@ regs_address = [item+12389 for item in regs_address]
 regs_value = range(23)
 regs_value = [item*4 for item in regs_value]
 
-regs_value = [5]*4
+regs_value = [80]*4
+regs_value += [5]*4
+regs_value += [5]*4
 regs_value += [80]*4
-regs_value += [35]*4
-regs_value += [50]*4
 regs_value += [20]*5
 regs_value += [65]*2
+
+regs_value = [0]*23
+indices = []
+while len(indices) < 6:
+    val = random.randint(0, 22)
+    print val
+    if val not in indices:
+        indices.append(val)
+        regs_value[val] = 90
+
 
 try:
     c = AutomatonClient(host=SERVER_HOST, port=SERVER_PORT)

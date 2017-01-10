@@ -1,3 +1,6 @@
+#! /usr/bin/env python
+# -*- coding:utf-8 -*-
+
 from automaton_client import *
 
 SERVER_HOST = "localhost"

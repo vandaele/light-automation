@@ -1,3 +1,6 @@
+#! /usr/bin/env python
+# -*- coding:utf-8 -*-
+
 """
 Blink randomly leds panels until keyboard interrupt.
 """

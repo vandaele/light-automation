@@ -1,4 +1,5 @@
 import functools
+import json
 
 from flask import Flask, Response, abort
 from flask import request
@@ -24,17 +25,47 @@ def modbus_decorator(func):
     return _wrap
 
 
-def str2bool(v):
-  return v.lower() in ("yes", "true", "t", "1")
 
 @app.route('/leds/<int:id>', methods=['PUT'])
 @modbus_decorator
 def leds(id):
-    value = str2bool(request.data)
+    value = int(request.data)
     if c.write(id, value):
         return Response('OK, led panel %u to %s' % (id, value),status=200)
     else:
         return Response('cant change led panel %u, data %s' % (id, request.data))
+
+
+@app.route('/leds', methods=['PUT'])
+@modbus_decorator
+def leds_put_all():
+    values = json.loads(request.data)
+    for id, jvalue in enumerate(values):
+        value = int(jvalue)
+        if not c.write(id, value):
+            return Response('cant change led panel %u, data %s' % (id, jvalue))
+    return Response('OK, led panels to %s' % (values), status=200)
+
+
+@app.route('/leds/<int:id>', methods=['GET'])
+@modbus_decorator
+def leds_read(id):
+    def generate():
+        while True:
+            yield c.read(id)
+
+    if not c.is_open():
+        if not c.open():
+            print("unable to connect to %s:%s" % (c.host(), c.port()))
+    if c.is_open():
+        return Response(generate(),status=200)
+    return abort(500)
+
+
+@app.route('/leds', methods=['GET'])
+@modbus_decorator
+def leds_read_all():
+    return Response(json.dumps(c.read_all()),status=200)
 
 
 @app.route('/leds_random', methods=['POST'])

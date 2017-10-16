@@ -31,8 +31,19 @@ def str2bool(v):
 @modbus_decorator
 def leds(id):
     value = str2bool(request.data)
-    c.write(id, value)
-    return Response('OK',status=200)
+    if c.write(id, value):
+        return Response('OK, led panel %u to %s' % (id, value),status=200)
+    else:
+        return Response('cant change led panel %u, data %s' % (id, request.data))
+
+
+@app.route('/leds_random', methods=['POST'])
+@modbus_decorator
+def leds_random():
+    if c.set_random():
+        return Response('OK, set_random',status=200)
+    else:
+        return Response('cant change led panel set_random' % (id, request.data))
 
 
 @app.route('/loop_write/start', methods=['POST'])
@@ -48,7 +59,7 @@ def loop_write_stop():
 
 if __name__ == "__main__":
     try:
-        app.run(host='0.0.0.0',port=3001)
+        app.run(host='0.0.0.0',port=3001, debug=True)
     except (KeyboardInterrupt, SystemExit):
         # interrupting this script sets all panels to off
         c.clear_all()

@@ -13,3 +13,4 @@ name = "pypi"
 
 pyModbusTCP = "*"
 pyyaml = "*"
+Flask = "*"

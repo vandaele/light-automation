@@ -1,15 +1,20 @@
 import random
+import yaml
 
 from pyModbusTCP.client import ModbusClient
 
-SERVER_HOST = "localhost"
-SERVER_PORT = 1502
+with open("config.yml", 'r') as yamlfile:
+    cfg = yaml.load(yamlfile)
 
-REGISTER_START = 12389
-REGISTER_NB = 23
+REGISTER_START = cfg['REGISTER_START']
+REGISTER_NB = cfg['REGISTER_NB']
+SERVER_HOST = cfg['SERVER_HOST']
+SERVER_PORT = cfg['SERVER_PORT']
 
 
 class AutomatonClient(ModbusClient):
+    def __init__(self, host=SERVER_HOST, port=SERVER_PORT, *args, **kwargs):
+        ModbusClient.__init__(self, host, port, *args,**kwargs)
 
     def read(self, index):
         return self.read_holding_registers(REGISTER_START+index)

@@ -33,6 +33,3 @@ class AutomatonClient(ModbusClient):
 
     def clear_all(self):
         return self.write_all([0]*REGISTER_NB)
-
-    def set_random(self):
-        return self.write_all([random.randint(0, 1) * 100 for i in range(REGISTER_NB)])

@@ -5,20 +5,12 @@ import random
 import time
 
 from automaton_client import AutomatonClient
+from utils.random import random6
 
 SLEEP_INTERVAL = 5
 
 # sets on only 6 randomly chosen panels
-def random6():
-    regs_values = [0] * 23
-    indices = []
-    while len(indices) < 6:
-        val = random.randint(0, 22)
-        print val
-        if val not in indices:
-            indices.append(val)
-            regs_values[val] = 100
-    return regs_values
+
 
 
 try:

@@ -5,31 +5,21 @@ import random
 import time
 
 from automaton_client import AutomatonClient
+from utils.random import random6
 
-SERVER_HOST = "localhost"
-SERVER_PORT = 1502
 SLEEP_INTERVAL = 5
 
 # sets on only 6 randomly chosen panels
-def random6():
-    regs_values = [0] * 23
-    indices = []
-    while len(indices) < 6:
-        val = random.randint(0, 22)
-        print val
-        if val not in indices:
-            indices.append(val)
-            regs_values[val] = 100
-    return regs_values
+
 
 
 try:
-    c = AutomatonClient(host=SERVER_HOST, port=SERVER_PORT)
+    c = AutomatonClient()
 
     # open or reconnect TCP to server
     if not c.is_open():
         if not c.open():
-            print("unable to connect to %s:%s" % (SERVER_HOST, SERVER_PORT))
+            print("unable to connect to %s:%s" % (c.host(), c.port()))
 
     if c.is_open():
         while True:
